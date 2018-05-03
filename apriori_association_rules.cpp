@@ -33,7 +33,7 @@ const double MIN_SUP =0.5;
 const double MIN_CONF=0.6;
 int numItems=0;
 
-structure C;
+structure C;                            //Apriori扫描时迭代使用
 structure L;
 
 structure Frequent_itemsets;            //收集所有的频繁项集
@@ -44,17 +44,17 @@ structure H;                            //求解关联规则时后件集合
 void C1();                              //生成单个物品的候选集
 void L1();                              //通过C1进行最小支持度的筛选生成L1
 void generate_C();                      //这里只是上一层L进行了组合，没有计算支持度
-void generate_L();                      //C中符合最小支持度的项集挑选出来
-void output(structure );                //将项集和频率对应的字典格式化输出
-void scan_D();                          //扫描数据集设置C的频率
 void prune();                           //从L生成的候选集C进行修剪
-bool check_compatibility(VI ,VI );      //检测两个vector內的除最后元素的其他元素是否一一对应相等
-void set_count(VI );
-void generateRules();                   //生成关联规则
-VI minus_v(VI ,VI );
-void merge_H();
+void scan_D();                          //扫描数据集设置C中项集的支持度
+void generate_L();                      //C中符合最小支持度的项集挑选出来
 void apriori();
-
+void generateRules();                   //生成关联规则
+void merge_H();                         //对H进行可能的合并，与generate_C类似
+//辅助函数
+void set_count(VI );                    //给C中项集计数
+bool check_compatibility(VI ,VI );      //检测两个vector內的除最后元素的其他元素是否一一对应相等
+VI minus_v(VI ,VI );                    //从一个vector中删除与另一个相同的元素
+void output(structure );                //将项集和频率对应的字典格式化输出
 
 int main(int argc, char const *argv[])
 {
@@ -62,16 +62,16 @@ int main(int argc, char const *argv[])
 	apriori();
 
     cout<<endl<<"Support data:"<<endl;
-	output(Support_data);
-	cout<<endl<<"Frequent_itemsets:"<<endl;
-	output(Frequent_itemsets);
+    output(Support_data);
+    cout<<endl<<"Frequent_itemsets:"<<endl;
+    output(Frequent_itemsets);
     cout<<endl<<"Association rules:\n";
 
     //从频繁项集中挖掘关联规则
-	generateRules();
+    generateRules();
 
-	system("PAUSE");
-	return 0;
+    system("PAUSE");
+    return 0;
 }
 
 void apriori()
